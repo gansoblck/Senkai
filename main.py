@@ -1,88 +1,83 @@
 import os
-from tkinter import Tk, Label, Entry, Button, filedialog, messagebox
+from tkinter import filedialog, StringVar, DoubleVar
 from PIL import Image
-
-def selecionar_pasta_origem():
-    pasta_origem = filedialog.askdirectory(title="Selecione a pasta com as imagens")
-    entrada_pasta_origem.delete(0, 'end')
-    entrada_pasta_origem.insert(0, pasta_origem)
-
-def selecionar_pasta_saida():
-    pasta_saida = filedialog.askdirectory(title="Selecione a pasta para salvar as imagens cortadas")
-    entrada_pasta_saida.delete(0, 'end')
-    entrada_pasta_saida.insert(0, pasta_saida)
+import ttkbootstrap as ttk  # Certifique-se de usar ttkbootstrap
 
 def cortar_imagens():
-    pasta_imagens = entrada_pasta_origem.get()
-    pasta_saida = entrada_pasta_saida.get()
-    
-    try:
-        porcentagem_corte_altura = float(entrada_altura.get()) / 100
-        porcentagem_corte_largura = float(entrada_largura.get()) / 100
-    except ValueError:
-        messagebox.showerror("Erro", "Insira valores numéricos válidos para o corte!")
+    pasta_origem = origem.get()
+    pasta_destino = destino.get()
+    corte_altura = corte_h.get()
+    corte_largura = corte_w.get()
+
+    if not os.path.exists(pasta_origem):
+        resultado.set("Pasta de origem não encontrada!")
         return
 
-    if not os.path.exists(pasta_imagens):
-        messagebox.showerror("Erro", "Pasta de origem não encontrada!")
-        return
-    
-    if not os.path.exists(pasta_saida):
-        os.makedirs(pasta_saida)
-    
-    total_imagens = len([f for f in os.listdir(pasta_imagens) if f.endswith(('.png', '.jpg', '.jpeg'))])
-    if total_imagens == 0:
-        messagebox.showerror("Erro", "Nenhuma imagem encontrada na pasta de origem!")
-        return
+    if not os.path.exists(pasta_destino):
+        os.makedirs(pasta_destino)
 
-    contador = 0
-    for arquivo in os.listdir(pasta_imagens):
+    for arquivo in os.listdir(pasta_origem):
         if arquivo.endswith(('.png', '.jpg', '.jpeg')):
-            try:
-                caminho_imagem = os.path.join(pasta_imagens, arquivo)
-                imagem = Image.open(caminho_imagem)
-                largura, altura = imagem.size
+            caminho_imagem = os.path.join(pasta_origem, arquivo)
+            imagem = Image.open(caminho_imagem)
+            largura, altura = imagem.size
 
-                nova_altura = int(altura * (1 - porcentagem_corte_altura))
-                nova_largura = int(largura * (1 - porcentagem_corte_largura))
-                caixa_corte = (0, 0, nova_largura, nova_altura)
+            altura_corte = int(altura * (1 - corte_altura))
+            largura_corte = int(largura * (1 - corte_largura))
+            caixa_corte = (0, 0, largura_corte, altura_corte)
 
-                imagem_cortada = imagem.crop(caixa_corte)
-                caminho_salvar = os.path.join(pasta_saida, f"cortada_{arquivo}")
-                imagem_cortada.save(caminho_salvar)
+            imagem_cortada = imagem.crop(caixa_corte)
+            caminho_salvar = os.path.join(pasta_destino, f"cortada_{arquivo}")
+            imagem_cortada.save(caminho_salvar)
 
-                contador += 1
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao processar {arquivo}: {e}")
-                return
+    resultado.set(f"Imagens cortadas e salvas em {pasta_destino}")
 
-    messagebox.showinfo("Sucesso", f"{contador} imagens cortadas e salvas na pasta '{pasta_saida}'.")
+def escolher_pasta_origem():
+    pasta = filedialog.askdirectory()
+    origem.set(pasta)
 
-# Criando a interface gráfica
-app = Tk()
-app.title("Senkai")
-app.geometry("600x400")
+def escolher_pasta_destino():
+    pasta = filedialog.askdirectory()
+    destino.set(pasta)
 
-# Labels e Campos de Entrada
-Label(app, text="Pasta de origem:").pack(pady=5)
-entrada_pasta_origem = Entry(app, width=50)
-entrada_pasta_origem.pack(pady=5)
-Button(app, text="Selecionar Pasta", command=selecionar_pasta_origem).pack(pady=5)
+def atualizar_porcentagem_h(event):
+    porcentagem_h.set(f"{corte_h.get() * 100:.0f}%")
 
-Label(app, text="Pasta de saída:").pack(pady=5)
-entrada_pasta_saida = Entry(app, width=50)
-entrada_pasta_saida.pack(pady=5)
-Button(app, text="Selecionar Pasta", command=selecionar_pasta_saida).pack(pady=5)
+def atualizar_porcentagem_w(event):
+    porcentagem_w.set(f"{corte_w.get() * 100:.0f}%")
 
-Label(app, text="Corte de Altura (%):").pack(pady=5)
-entrada_altura = Entry(app, width=10)
-entrada_altura.pack(pady=5)
+# Criando a janela principal
+app = ttk.Window(themename="darkly")
+app.title("Senkai - Batch Image Cropper")
+app.geometry("600x600")
 
-Label(app, text="Corte de Largura (%):").pack(pady=5)
-entrada_largura = Entry(app, width=10)
-entrada_largura.pack(pady=5)
+# Variáveis de controle
+origem = StringVar()
+destino = StringVar()
+corte_h = DoubleVar(value=0.1)
+corte_w = DoubleVar(value=0.1)
+resultado = StringVar()
+porcentagem_h = StringVar(value="10%")
+porcentagem_w = StringVar(value="10%")
 
-Button(app, text="Cortar Imagens", command=cortar_imagens).pack(pady=20)
+# Interface Gráfica
+ttk.Label(app, text="Caminho da pasta de origem:", bootstyle="info").pack(pady=10)
+ttk.Button(app, text="Selecionar Pasta", command=escolher_pasta_origem, bootstyle="primary").pack(pady=5)
+ttk.Label(app, textvariable=origem).pack(pady=5)
 
-# Iniciar a aplicação
+ttk.Label(app, text="Caminho da pasta de destino:", bootstyle="info").pack(pady=10)
+ttk.Button(app, text="Selecionar Pasta", command=escolher_pasta_destino, bootstyle="primary").pack(pady=5)
+ttk.Label(app, textvariable=destino).pack(pady=5)
+
+ttk.Label(app, text="Porcentagem de corte (altura):", bootstyle="info").pack(pady=10)
+ttk.Scale(app, from_=0, to=1, orient="horizontal", variable=corte_h, command=atualizar_porcentagem_h, bootstyle="dark").pack(pady=5)
+ttk.Label(app, textvariable=porcentagem_h, bootstyle="info").pack(pady=5)
+
+ttk.Label(app, text="Porcentagem de corte (largura):", bootstyle="info").pack(pady=10)
+ttk.Scale(app, from_=0, to=1, orient="horizontal", variable=corte_w, command=atualizar_porcentagem_w, bootstyle="dark").pack(pady=5)
+ttk.Label(app, textvariable=porcentagem_w, bootstyle="info").pack(pady=5)
+
+ttk.Button(app, text="Cortar Imagens", command=cortar_imagens, bootstyle="success").pack(pady=20)
+ttk.Label(app, textvariable=resultado, bootstyle="info").pack(pady=5)
+
 app.mainloop()
