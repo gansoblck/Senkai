@@ -60,8 +60,8 @@ def cortar_imagens():
 
 # Criando a interface gráfica
 app = Tk()
-app.title("Cortar Imagens em Massa")
-app.geometry("500x300")
+app.title("Senkai")
+app.geometry("600x400")
 
 # Labels e Campos de Entrada
 Label(app, text="Pasta de origem:").pack(pady=5)
