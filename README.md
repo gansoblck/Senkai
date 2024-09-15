@@ -21,7 +21,7 @@ Senkai - Batch Image Cropper
 ## Como usar:
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seu-usuario/senkai.git
+   git clone https://github.com/gansoblck/senkai.git
    ```
 2. Navegue até o diretório do projeto:
    ```bash
