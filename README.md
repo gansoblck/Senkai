@@ -35,7 +35,7 @@ Senkai - Batch Image Cropper
    ```
 4. Instale as dependências:
    ```bash
-   pip install -r requirements.txt
+   pip install -r requiriments.txt
    ```
 5. Execute a aplicação:
    ```bash
