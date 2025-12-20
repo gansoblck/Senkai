@@ -1,3 +1,0 @@
-Pillow
-ttkbootstrap 
-tkinter
