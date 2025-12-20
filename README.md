@@ -1,15 +1,13 @@
-# Senkai
-Senkai - Batch Image Cropper
----
+# Senkai - Batch Image Cropper
+
 <p align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1869px-Python-logo-notext.svg.png" height="80" alt="Python">
   <img src="https://repository-images.githubusercontent.com/349559539/ee07e100-bc88-11eb-9458-5b096b071112" height="80" alt="Tkinter">
 </p>
-# Senkai - Batch Image Cropper
 
 **Senkai** It is a powerful and easy-to-use tool for cropping images automatically and in bulk. It is not just a command-line tool. It includes a user-friendly interface that allows you to crop images to any size you want using a simple scroll to adjust the dimensions. You do not need any programming knowledge. Just install it and use it.
 
-## Funcionalidades:
+## Functionalities:
 - Support for multiple image formats such as .png, .jpg, and .jpeg.
 
 - Selection of source and destination directories for cropped images.
@@ -20,12 +18,12 @@ Senkai - Batch Image Cropper
 
 - Automatically saves cropped images to a folder of your choice.
 
-## Tecnologias:
+## Technologies:
 - **Python** using the **Pillow (PIL)** library for image manipulation.
 
 - Simple and intuitive graphical interface built with **Tkinter**.
 
-## Como usar:
+## How to use:
 1. Clone this repository:
    ```bash
    git clone https://github.com/theprince404/senkai.git
@@ -49,7 +47,7 @@ Senkai - Batch Image Cropper
    python senkai.py
    ```
 
-## Contribuições:
-Contribuições são sempre bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests para melhorias.
+## Contributions:
+Feel free to contribute to the project.
 
 ---
