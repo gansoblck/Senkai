@@ -44,7 +44,7 @@
    ```
 5. Execute the application:
    ```bash
-   python senkai.py
+   python main.py
    ```
 
 ## Contributions:
